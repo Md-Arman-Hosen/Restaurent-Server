@@ -27,6 +27,9 @@ async function run() {
 
     const menuCollection = client.db('RestaurentDb').collection('menu');
     const reviewCollection = client.db('RestaurentDb').collection('reviews');
+    const cartCollection = client.db('RestaurentDb').collection('carts');
+
+  
     app.get('/menu',async (req,res)=>{
         const result = await menuCollection.find().toArray();
         res.send(result);
@@ -36,7 +39,11 @@ async function run() {
         res.send(result);
     })
 
-
+    app.post('/carts',async (req,res)=>{
+      const cartItem = req.body;
+      const result = await cartCollection.insertOne(cartItem);
+      res.send(result);
+  })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -56,3 +63,15 @@ app.get('/', (req, res ) =>
 app.listen(port,() => {
     console.log(`boss is sitting on port ${port} `);
 })
+
+/** ------------------
+ * naming convention 
+ * -------------------
+ * app.get("/users") sob gula users
+ * app.get('/users/:id') specific users
+ * app.post('/users') ekta user toiri
+ * app.put('/users/:id') specific users e kisu ekta korte
+ * app.patch('/users/:id') 
+ * app.delete('/users/:id') 
+ * 
+*/

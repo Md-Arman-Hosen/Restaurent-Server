@@ -1,11 +1,11 @@
-const express = require ('express');
-const app = express ();
+const express = require('express');
+const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 5000;
 require('dotenv').config()
 //middleware
 app.use(cors());
-app.use(express.json ());
+app.use(express.json());
 
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
@@ -29,21 +29,26 @@ async function run() {
     const reviewCollection = client.db('RestaurentDb').collection('reviews');
     const cartCollection = client.db('RestaurentDb').collection('carts');
 
-  
-    app.get('/menu',async (req,res)=>{
-        const result = await menuCollection.find().toArray();
-        res.send(result);
-    })
-    app.get('/reviews',async (req,res)=>{
-        const result = await reviewCollection.find().toArray();
-        res.send(result);
-    })
 
-    app.post('/carts',async (req,res)=>{
+    app.get('/menu', async (req, res) => {
+      const result = await menuCollection.find().toArray();
+      res.send(result);
+    })
+    app.get('/reviews', async (req, res) => {
+      const result = await reviewCollection.find().toArray();
+      res.send(result);
+    })
+    //carts Collection
+
+    app.get('/carts', async (req, res) => {
+      const result = await cartCollection.find().toArray();
+      res.send(result);
+    });
+    app.post('/carts', async (req, res) => {
       const cartItem = req.body;
       const result = await cartCollection.insertOne(cartItem);
       res.send(result);
-  })
+    })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -56,12 +61,11 @@ async function run() {
 run().catch(console.dir);
 
 
-app.get('/', (req, res ) =>
-{
-    res.send('boss is sitting')
+app.get('/', (req, res) => {
+  res.send('boss is sitting')
 })
-app.listen(port,() => {
-    console.log(`boss is sitting on port ${port} `);
+app.listen(port, () => {
+  console.log(`boss is sitting on port ${port} `);
 })
 
 /** ------------------
